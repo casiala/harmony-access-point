@@ -24,13 +24,17 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
     private static final DomibusLogger LOG = DomibusLoggerFactory.getLogger(DomibusAlgorithmSuite.class);
 
     public static final String AES128_GCM_ALGORITHM = "http://www.w3.org/2009/xmlenc11#aes128-gcm";
+    public static final String AES256_GCM_ALGORITHM = "http://www.w3.org/2009/xmlenc11#aes256-gcm";
 
     public static final String BASIC_128_GCM_SHA_256_RSA = "Basic128GCMSha256";
-
     public static final String BASIC_128_GCM_SHA_256_MGF_SHA_256_RSA = "Basic128GCMSha256MgfSha256";
 
-    //TODO: check below value for correctness when the ECC library is chosen
+    public static final String BASIC_256_GCM_SHA_256_RSA = "Basic256GCMSha256";
+    public static final String BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA = "Basic256GCMSha256MgfSha256";
+
+    // TODO: check below value for correctness when the ECC library is chosen
     public static final String BASIC_128_GCM_SHA_256_MGF_SHA_256_ECC = "Basic128GCMSha256MgfSha256ECC";
+    public static final String BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC = "Basic256GCMSha256MgfSha256ECC";
 
     protected Map<String, AlgorithmSuiteType> algorithmSuiteTypesCopy;
 
@@ -45,9 +49,7 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
                         SPConstants.KW_RSA_OAEP,
                         SPConstants.P_SHA1_L128,
                         SPConstants.P_SHA1_L128,
-                        128, 128, 128, 256, 1024, 4096
-                )
-        );
+                        128, 128, 128, 256, 1024, 4096));
 
         ALGORITHM_SUITE_TYPES.put(
                 RSA.getProfile(),
@@ -61,12 +63,9 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
                         SPConstants.P_SHA1_L128,
                         null,
                         AsymmetricSignatureAlgorithm.RSA_SHA256.getAlgorithm(),
-                        128, 128, 128, 256, 1024, 4096
-                )
-        );
+                        128, 128, 128, 256, 1024, 4096));
         ALGORITHM_SUITE_TYPES.get(RSA.getProfile()).setMGFAlgo(MGF_SHA256);
         ALGORITHM_SUITE_TYPES.get(RSA.getProfile()).setEncryptionDigest(SPConstants.SHA256);
-
 
         ALGORITHM_SUITE_TYPES.put(
                 ECC.getProfile(),
@@ -75,16 +74,59 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
                         SPConstants.SHA256,
                         AES128_GCM_ALGORITHM,
                         SPConstants.KW_AES128,
-                        BASIC_128_GCM_SHA_256_MGF_SHA_256_ECC, //TODO: replace with WSS4JConstants.ECC_???,
+                        BASIC_128_GCM_SHA_256_MGF_SHA_256_ECC, // TODO: replace with WSS4JConstants.ECC_???,
                         SPConstants.P_SHA1_L128,
                         SPConstants.P_SHA1_L128,
                         null,
                         AsymmetricSignatureAlgorithm.ECC_SHA256.getAlgorithm(),
-                        128, 128, 128, 256, 1024, 4096
-                )
-        );
+                        128, 128, 128, 256, 1024, 4096));
         ALGORITHM_SUITE_TYPES.get(ECC.getProfile()).setMGFAlgo(MGF_SHA256);
         ALGORITHM_SUITE_TYPES.get(ECC.getProfile()).setEncryptionDigest(SPConstants.SHA256);
+
+        // Adding AES 256 GCM Algorithm Suite Types
+        ALGORITHM_SUITE_TYPES.put(
+                BASIC_256_GCM_SHA_256_RSA,
+                new AlgorithmSuiteType(
+                        BASIC_256_GCM_SHA_256_RSA,
+                        SPConstants.SHA256,
+                        AES256_GCM_ALGORITHM,
+                        SPConstants.KW_AES256,
+                        SPConstants.KW_RSA_OAEP,
+                        SPConstants.P_SHA1_L256,
+                        SPConstants.P_SHA1_L256,
+                        256, 256, 256, 256, 1024, 4096));
+
+        ALGORITHM_SUITE_TYPES.put(
+                BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA,
+                new AlgorithmSuiteType(
+                        BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA,
+                        SPConstants.SHA256,
+                        AES256_GCM_ALGORITHM,
+                        SPConstants.KW_AES256,
+                        WSS4JConstants.KEYTRANSPORT_RSAOAEP_XENC11,
+                        SPConstants.P_SHA1_L256,
+                        SPConstants.P_SHA1_L256,
+                        null,
+                        AsymmetricSignatureAlgorithm.RSA_SHA256.getAlgorithm(),
+                        256, 256, 256, 256, 1024, 4096));
+        ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA).setMGFAlgo(MGF_SHA256);
+        ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA).setEncryptionDigest(SPConstants.SHA256);
+
+        ALGORITHM_SUITE_TYPES.put(
+                BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC,
+                new AlgorithmSuiteType(
+                        BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC,
+                        SPConstants.SHA256,
+                        AES256_GCM_ALGORITHM,
+                        SPConstants.KW_AES256,
+                        BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC, // TODO: replace with WSS4JConstants.ECC_???,
+                        SPConstants.P_SHA1_L256,
+                        SPConstants.P_SHA1_L256,
+                        null,
+                        AsymmetricSignatureAlgorithm.ECC_SHA256.getAlgorithm(),
+                        256, 256, 256, 256, 1024, 4096));
+        ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC).setMGFAlgo(MGF_SHA256);
+        ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC).setEncryptionDigest(SPConstants.SHA256);
     }
 
     DomibusAlgorithmSuite(final SPConstants.SPVersion version, final Policy nestedPolicy) {
@@ -100,6 +142,10 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
     protected void parseCustomAssertion(final Assertion assertion) {
         final String assertionName = assertion.getName().getLocalPart();
         final String assertionNamespace = assertion.getName().getNamespaceURI();
+
+        // LOG.info("Parsing custom assertion [{}]", assertionName);
+        // LOG.info("Parsing custom assertion namespace [{}]", assertionNamespace);
+
         if (!DomibusAlgorithmSuiteLoader.E_DELIVERY_ALGORITHM_NAMESPACE.equals(assertionNamespace)) {
             return;
         }
@@ -113,18 +159,31 @@ public class DomibusAlgorithmSuite extends AlgorithmSuite {
         } else if (BASIC_128_GCM_SHA_256_MGF_SHA_256_ECC.equals(assertionName)) {
             setAlgorithmSuiteType(ALGORITHM_SUITE_TYPES.get(ECC.getProfile()));
             getAlgorithmSuiteType().setNamespace(assertionNamespace);
+        } else if (BASIC_256_GCM_SHA_256_RSA.equals(assertionName)) {
+            setAlgorithmSuiteType(ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_RSA));
+            getAlgorithmSuiteType().setNamespace(assertionNamespace);
+        } else if (BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA.equals(assertionName)) {
+            setAlgorithmSuiteType(ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_RSA));
+            getAlgorithmSuiteType().setNamespace(assertionNamespace);
+        } else if (BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC.equals(assertionName)) {
+            setAlgorithmSuiteType(ALGORITHM_SUITE_TYPES.get(BASIC_256_GCM_SHA_256_MGF_SHA_256_ECC));
+            getAlgorithmSuiteType().setNamespace(assertionNamespace);
         }
     }
 
     /**
-     * Retrieves the Algorithm Suite Type corresponding to the security profile, defaulting to the RSA correspondent
+     * Retrieves the Algorithm Suite Type corresponding to the security profile,
+     * defaulting to the RSA correspondent
      * if no security profile is defined
      *
      * @param securityProfile the configured security profile
-     * @throws ConfigurationException exception thrown when an invalid security profile is set
+     * @throws ConfigurationException exception thrown when an invalid security
+     *                                profile is set
      * @return the Algorithm Suite Type for a security profile
      */
     public AlgorithmSuiteType getAlgorithmSuiteType(SecurityProfile securityProfile) throws ConfigurationException {
+        // LOG.info("Retrieving Algorithm Suite Type for security profile [{}]", securityProfile);
+        
         if (algorithmSuiteTypesCopy == null) {
             algorithmSuiteTypesCopy = new HashMap<>(ALGORITHM_SUITE_TYPES);
         }
